@@ -10,6 +10,8 @@ Free Edition–friendly integration: a **Lark (Feishu) WebSocket bot** hosted as
 | Hardening | Job failure alerts, RuntimeLock, structured JSON logs |
 | UX | Bot copy auto zh/en from user message language |
 
+Genie Add-on for Lark Wiki (Docs / Sheets / Base) is on the roadmap — keep watching this repo for updates.
+
 > Placeholders: `YOUR_*`, `<PROFILE>`. Do not commit real secrets.
 
 ## Repo layout
