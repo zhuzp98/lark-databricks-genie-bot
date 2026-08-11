@@ -1,0 +1,33 @@
+# Runtime config for Databricks Apps (Phase A + OBO bind).
+command:
+  - python
+  - app/app_main.py
+
+env:
+  - name: LARK_APP_ID
+    valueFrom: lark-app-id
+  - name: LARK_APP_SECRET
+    valueFrom: lark-app-secret
+  - name: LARK_OPEN_API_BASE
+    valueFrom: lark-open-api-base
+  - name: LARK_INBOUND_DIR
+    value: "/tmp/lark_inbound"
+  # Public Apps URL used in Lark "bind Databricks" links (no trailing slash).
+  - name: APP_PUBLIC_URL
+    value: "https://YOUR_APP_NAME.aws.databricksapps.com"
+  # Phase C: persist sessions + OBO tokens to Unity Catalog via SQL warehouse.
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "YOUR_WAREHOUSE_ID"
+  - name: LARK_UC_CATALOG
+    value: "workspace"
+  - name: LARK_UC_SCHEMA
+    value: "lark_integration"
+  - name: LARK_UC_PERSIST
+    value: "1"
+  # Phase D: single-writer lease (App vs local dual WS). Steal only for emergencies.
+  - name: LARK_RUNTIME_LOCK
+    value: "1"
+  - name: LARK_RUNTIME_LOCK_STEAL
+    value: "0"
+  - name: LARK_LOG_SERVICE
+    value: "lark-genie-bot"

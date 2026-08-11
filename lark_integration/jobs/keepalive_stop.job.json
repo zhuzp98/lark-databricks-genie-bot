@@ -1,0 +1,39 @@
+{
+  "name": "lark-genie-bot-keepalive-stop",
+  "description": "Phase B/D: stop lark-genie-bot daily at UTC 23:50. Email + Lark notify on failure.",
+  "email_notifications": {
+    "on_failure": ["YOUR_DATABRICKS_USER@example.com"],
+    "no_alert_for_skipped_runs": true
+  },
+  "schedule": {
+    "quartz_cron_expression": "0 50 23 * * ?",
+    "timezone_id": "UTC",
+    "pause_status": "UNPAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "timeout_seconds": 900,
+  "tasks": [
+    {
+      "task_key": "stop_app",
+      "description": "Stop Databricks App lark-genie-bot",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/YOUR_DATABRICKS_USER@example.com/lark_genie_bot/notebooks/04_app_keepalive",
+        "source": "WORKSPACE",
+        "base_parameters": {
+          "action": "stop",
+          "app_name": "lark-genie-bot",
+          "wait_seconds": "600",
+          "notify_open_id": "ou_YOUR_LARK_OPEN_ID"
+        }
+      },
+      "max_retries": 1,
+      "min_retry_interval_millis": 60000,
+      "timeout_seconds": 800
+    }
+  ],
+  "tags": {
+    "project": "lark-genie-bot",
+    "phase": "D",
+    "action": "stop"
+  }
+}

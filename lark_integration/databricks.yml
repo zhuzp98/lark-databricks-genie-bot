@@ -1,0 +1,55 @@
+# Databricks Asset Bundle — Lark Genie Bot App (Free Edition Phase A)
+bundle:
+  name: lark-genie-bot
+
+# Free Edition: avoid workspace.current_user (SCIM /Me can be Forbidden).
+# Deploying user uploads under a fixed Workspace path.
+workspace:
+  root_path: /Workspace/Shared/lark_genie_bot_bundle/${bundle.target}
+  file_path: /Workspace/Shared/lark_genie_bot_bundle/${bundle.target}/files
+
+sync:
+  include:
+    - ./**
+  exclude:
+    - .venv/**
+    - "**/__pycache__/**"
+    - "**/*.pyc"
+    - tmp/**
+    - notebooks/**
+
+resources:
+  apps:
+    lark_genie_bot:
+      name: lark-genie-bot
+      description: "Lark ↔ Genie One bot (WebSocket + OBO bind). Free Edition; keep-alive Jobs UTC 23:50 stop / 00:50 start."
+      source_code_path: .
+      user_api_scopes:
+        - dashboards.genie
+        - sql
+        - genie
+      resources:
+        - name: lark-app-id
+          secret:
+            scope: lark_integration
+            key: lark_app_id
+            permission: READ
+        - name: lark-app-secret
+          secret:
+            scope: lark_integration
+            key: lark_app_secret
+            permission: READ
+        - name: lark-open-api-base
+          secret:
+            scope: lark_integration
+            key: lark_open_api_base
+            permission: READ
+
+targets:
+  dev:
+    default: true
+    mode: development
+    resources:
+      apps:
+        lark_genie_bot:
+          name: lark-genie-bot

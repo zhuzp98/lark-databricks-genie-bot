@@ -1,0 +1,42 @@
+# Databricks Free Edition 限制（与本项目相关）
+
+官方文档：[Databricks Free Edition limitations](https://docs.databricks.com/aws/en/getting-started/free-edition-limitations)。
+
+English: [`../en/databricks-free-edition-limits.md`](../en/databricks-free-edition-limits.md)。
+
+超出公平使用配额后，计算会被关闭、当日可能不可用；**数据与配置保留**。无 SLA / 官方支持；**禁止商业用途**。
+
+---
+
+## 对本仓库影响最大的约束
+
+| 约束 | 影响 | 本项目对策 |
+|------|------|------------|
+| Apps ≤ **3**；启动后约 **24h** 自动暂停 | Bot 不能当永久进程 | 单 App；UTC 夜间 stop/start Job 保活 |
+| 无 Account Console / account-level APIs | 不能注册自定义 OAuth App Connection | Apps User Authorization + `/bind` |
+| 1× SQL Warehouse，`2X-Small` | Genie + Job 共用 | 批任务与问答错峰 |
+| Jobs 并发 ≤ **5** | 保活 + 同步 Job 争配额 | 保活 Job 极轻量；批任务串行/合并 |
+| 出站网络默认受限 | 调不通 `open.larksuite.com` | 需 LinkedIn 验证等解锁出站 |
+| 无 SSO / SCIM | 身份靠邮箱 OTP / Google / Microsoft | 约定 Lark 企业邮箱 = Databricks 登录邮箱 |
+| Fair usage 关停计算 | Bot / Job 当日不可用 | Job 失败通知；升级付费账户 |
+
+---
+
+## 其他额度（简表）
+
+| 资源 | 限制 |
+|------|------|
+| 工作区 / UC metastore | 每账户各 1 |
+| 计算 | 仅 Serverless |
+| Lakeflow 管道 | 每类型 1 条活跃 |
+| AI Search / Lakebase / Model Serving | 有数量与功能上限（本 Bot 主路径不用） |
+
+不支持示例：R/Scala、Custom workspace storage、Online Tables、Clean Rooms、Knowledge Assistant 等——详见官方页。
+
+---
+
+## 使用建议
+
+- App 数量留余量；预期每日夜间有约 1h 停机窗口（本仓库默认 UTC 23:50–00:50）。  
+- 不要假设 OBO token 可 refresh；过期引导用户 `/bind`。  
+- 需要 Account OAuth、更高并发或 SLA 时升级商业 / 企业账户，再评估双 App broker（见 [`architecture.md`](architecture.md)）。
